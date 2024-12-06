@@ -14,6 +14,16 @@ function index(req, res) {
     })
 }
 
+function show(req, res) {
+    const id = req.params.id
+
+    const sql = 'SELECT * FROM posts WHERE id = ?'
+    connection.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: err })
+        if (results.length === 0) return res.status(404).json({ error: 'Posts not found' })
+        res.json(results[0])
+    })
+}
 
 
 
@@ -43,9 +53,8 @@ function index(req, res) {
 
 
 
-
-const posts = require('../data/db.js')
-const fs = require('fs')
+/* const posts = require('../data/db.js')
+const fs = require('fs') */
 
 /* const index = (req, res) => {
     res.json({
@@ -78,7 +87,7 @@ const store = (req, res) => {
     })
 }
 
-function show(req, res) {
+/* function show(req, res) {
     const post = posts.find(post => post.id === Number(req.params.id));
     if (!post) {
         return res.status(404).json({
@@ -88,7 +97,7 @@ function show(req, res) {
     return res.status(200).json({
         data: post
     })
-}
+} */
 
 const update = (req, res) => {
     const post = posts.find((post) => post.id === Number(req.params.id))

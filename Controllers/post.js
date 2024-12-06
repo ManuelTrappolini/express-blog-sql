@@ -17,13 +17,40 @@ function index(req, res) {
 function show(req, res) {
     const id = req.params.id
 
-    const sql = 'SELECT * FROM posts WHERE id = ?'
-    connection.query(sql, [id], (err, results) => {
+    const postsSql = 'SELECT * FROM posts WHERE id = ?'
+
+    const tagsSql = `
+        SELECT tags.*
+        FROM tags
+        JOIN post_tag ON tags.id = post_tag.tag_id
+        WHERE post_tag.post_id = ?
+        `
+    connection.query(postsSql, [id], (err, postsResults) => {
         if (err) return res.status(500).json({ error: err })
-        if (results.length === 0) return res.status(404).json({ error: 'Posts not found' })
-        res.json(results[0])
+        if (!postsResults[0]) return res.status(404).json({ error: `404! Post not found` })
+        const post = postsResults[0]
+        console.log(post);
+        connection.query(tagsSql, [id], (err, tagsResults) => {
+            if (err) return res.status(500).json({ error: err })
+            console.log(tagsResults);
+            post.tags = tagsResults
+            const responseData = {
+                data: post
+            }
+
+            res.status(200).json(responseData)
+
+        })
+
     })
+
 }
+
+
+
+
+
+
 
 
 function destroy(req, res) {

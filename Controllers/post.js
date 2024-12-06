@@ -1,13 +1,59 @@
+
+
+const connection = require('../data/database')
+
+function index(req, res) {
+    const sql = 'SELECT * FROM posts'
+
+
+    connection.query(sql, (err, results) => {
+        if (err) return res.serverStatus(500).json({ error: err })
+        console.log(results);
+
+        res.json(results)
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const posts = require('../data/db.js')
 const fs = require('fs')
 
-const index = (req, res) => {
+/* const index = (req, res) => {
     res.json({
         data: posts,
         count: posts.length
     })
 }
-
+ */
 const store = (req, res) => {
     console.log(req.body);
 
@@ -32,7 +78,7 @@ const store = (req, res) => {
     })
 }
 
-function show(req, res)  {
+function show(req, res) {
     const post = posts.find(post => post.id === Number(req.params.id));
     if (!post) {
         return res.status(404).json({
@@ -86,10 +132,10 @@ const destroy = (req, res) => {
         counter: newPosts.length
     })
 }
-    module.exports = {
-        store,
-        index,
-        show,
-        update,
-        destroy
-    }
+module.exports = {
+    store,
+    index,
+    show,
+    update,
+    destroy
+}

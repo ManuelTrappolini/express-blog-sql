@@ -26,6 +26,15 @@ function show(req, res) {
 }
 
 
+function destroy(req, res) {
+
+    const { id } = req.params;
+    connection.query('DELETE FROM posts WHERE id= ?', [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Failed to delete post' });
+        res.sendStatus(204)
+    })
+}
+
 
 
 
@@ -124,7 +133,7 @@ const update = (req, res) => {
 
 }
 
-const destroy = (req, res) => {
+/* const destroy = (req, res) => {
     const post = posts.find((post) => post.id === Number(req.params.id))
     if (!post) {
         return res.status(404).json({
@@ -140,7 +149,7 @@ const destroy = (req, res) => {
         data: newPosts,
         counter: newPosts.length
     })
-}
+} */
 module.exports = {
     store,
     index,
